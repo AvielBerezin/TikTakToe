@@ -38,7 +38,7 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        getPlaying(Player.humanPlayer(), Player.humanPlayer())
+        getPlaying(Player.humanPlayer(), Player.bestChoiceBotPlayer())
                 .forEach(gameState -> {
                     System.out.printf("%s|%s|%s%n" +
                                       "-----%n" +

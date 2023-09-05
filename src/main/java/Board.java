@@ -1,5 +1,6 @@
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public interface Board {
     Optional<Token> get(int row, int col);
@@ -57,7 +58,7 @@ public interface Board {
         };
     }
 
-    default boolean winningAt(int row, int col) {
+    default boolean isWinningAt(int row, int col) {
         return get(row, col).isPresent() &&
                (get(0, col).equals(get(1, col)) &&
                 get(1, col).equals(get(2, col)) ||
@@ -72,10 +73,29 @@ public interface Board {
     }
 
     default boolean winningAt(Position position) {
-        return winningAt(position.row(), position.col());
+        return isWinningAt(position.row(), position.col());
     }
 
     static Board emptyBoard() {
         return (row, col) -> Optional.empty();
+    }
+
+    default boolean equals(Board board) {
+        return get(0, 0).equals(board.get(0, 0)) &&
+               get(0, 1).equals(board.get(0, 1)) &&
+               get(0, 2).equals(board.get(0, 2)) &&
+               get(1, 0).equals(board.get(1, 0)) &&
+               get(1, 1).equals(board.get(1, 1)) &&
+               get(1, 2).equals(board.get(1, 2)) &&
+               get(2, 0).equals(board.get(2, 0)) &&
+               get(2, 1).equals(board.get(2, 1)) &&
+               get(2, 2).equals(board.get(2, 2));
+    }
+
+    default Stream<Position> empties() {
+        return Stream.of(0, 1, 2)
+                     .flatMap(row -> Stream.of(0, 1, 2)
+                                           .map(col -> new Position(row, col)))
+                     .filter(position -> get(position).isEmpty());
     }
 }
